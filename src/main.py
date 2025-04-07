@@ -15,14 +15,17 @@ i2c = SoftI2C(scl=Pin(I2C_CLOCK), sda=Pin(I2C_DATA))
 bh1750 = BH1750(i2c, dome=DIFFUSION_DOME)
 lux = 0
 
+
 async def read_sensor():
     global lux
     bh1750.measure()
     asyncio.sleep_ms(BH1750.MEASUREMENT_TIME_mS)
     lux = bh1750.illumination()
 
+
 async def communicate_readings():
     print("Lux:", lux)
+
 
 async def main():
     task1 = asyncio.create_task(read_sensor())
