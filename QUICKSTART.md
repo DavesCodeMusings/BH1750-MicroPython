@@ -1,5 +1,9 @@
 # Quickstart Guide
-If all you're interested in is a BH1750 driver to take Lux measurements on demand, this will show you how. Depending on if you're using asyncio or not, choose one of the code samples below to use as your main.py.
+If all you're interested in is a BH1750 driver to take Lux measurements on demand, this will show you how.
+
+First, install the driver with `mpremote mip install github:DavesCodeMusings/BH1750-MicroPython`
+
+Then, depending on if you're using asyncio or not, choose one of the code samples below to use as your main.py.
 
 ## Async
 ```
