@@ -1,7 +1,7 @@
 name: mpy build
 on: push
 env:
-  SRC_FILE: src/bh1750-one-shot.py
+  SRC_FILE: src/bh1750_one_shot.py
 permissions:
   contents: write
 jobs:
@@ -17,7 +17,7 @@ jobs:
       - name: Compiling bytecode...
         run: |
           pip3 install mpy-cross
-          python3 -m mpy_cross $SRC_FILE -o bh1750-one-shot.mpy
+          python3 -m mpy_cross $SRC_FILE -o bh1750_one_shot.mpy
       - name: Committing changes...
         run: |
           if [ $(git diff | wc -l) -gt 0 ]; then
