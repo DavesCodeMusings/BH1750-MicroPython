@@ -275,11 +275,11 @@ With the sensor toward the center of the room, pointed upward, I got a 70 Lux re
 ## Accounting for the Dome
 The BH1750 I purchased is encased in a white hemispherical dome. This is supposed to help diffuse the incoming light and make the angle of incidence less of a factor in the reading. But, it also reduces the ammount of light coming in. While not critical for my application, I was curious about how much of an effect the dome has.
 
-It turns out [someone else on the internet](https://thecavepearlproject.org/2024/08/10/using-a-bh1750-lux-sensor-to-measure-par/) was curious about this too, and geek out way harder on it than I did.
+It turns out [someone else on the internet](https://thecavepearlproject.org/2024/08/10/using-a-bh1750-lux-sensor-to-measure-par/) was curious about this too, and geeked out way harder on it than I did.
 
 To make a long blog post short, 110 Lux reported by a sensor with no dome was reported as 40 Lux with the dome. That's a reduction factor of 2.75x because of the dome.
 
-I also used [Lux meter app](https://play.google.com/store/apps/details?id=com.doggoapps.luxlight) on my phone to do a quick and dirty comparison. My phone varied wildly with even a slight change of angle. I got readings from the Lux Meter app of 90 to 150 vs 76 from the domed sensor. So with my crude methods, it was a factor of about 2x.
+I also used a [Lux meter app](https://play.google.com/store/apps/details?id=com.doggoapps.luxlight) on my phone to do a quick and dirty comparison. My phone varied wildly with even a slight change of angle. I got readings from the Lux Meter app of 90 to 150 vs 76 from the domed sensor. So with my crude methods, it was a factor of about 2x.
 
 Because I have no idea what the quality of the light sensor is for my phone, I'm more inclined to go with the 2.75x factor found by the author comparing the same sensor both with and without a dome.
 
@@ -389,7 +389,7 @@ What's been done above is to take the original program and rearrange the constan
 
 The names of the methods were insprired by the naming of [MicroPython DHT22](https://docs.micropython.org/en/latest/esp32/quickref.html#dht-driver) methods. But rather than temperature and humidity, we have only illumination.
 
-But what's missing inside the class is any reference to the `sleep_ms(180)`. We know it'ss required from reading the BH1750 datasheet. So why is it missing?
+But what's missing inside the class is any reference to the `sleep_ms(180)`. We know it's required from reading the BH1750 datasheet. So why is it missing?
 
 The answer to that is for flexibility. Calling `sleep_ms(180)` will cause the program to do nothing for 180 mS. Okay, so what?
 
