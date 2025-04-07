@@ -1,3 +1,5 @@
+# Read ambient light level from BH1750 sensor in Hi-Res One-Time mode
+
 from micropython import const
 
 
