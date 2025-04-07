@@ -23,13 +23,16 @@ lux = 0
 
 async def read_sensor():
     global lux
-    bh1750.measure()
-    asyncio.sleep_ms(BH1750.MEASUREMENT_TIME_mS)
-    lux = bh1750.illumination()
+    while True:
+        bh1750.measure()
+        await asyncio.sleep_ms(BH1750.MEASUREMENT_TIME_mS)
+        lux = bh1750.illumination()
 
 
 async def communicate_readings():
-    print("Lux:", lux)
+    while True:
+        await asyncio.sleep(1)
+        print("Lux:", lux)
 
 
 async def main():
@@ -45,7 +48,9 @@ asyncio.run(main())
 
 ```
 from machine import Pin, SoftI2C
+from micropython import const
 from time import sleep_ms
+from bh1750_one_shot import BH1750
 
 # Values for ESP32 Devkit V1 (30-pin board with four corner mounting holes)
 # Adjust as needed for other boards.

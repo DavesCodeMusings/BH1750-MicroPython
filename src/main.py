@@ -18,13 +18,16 @@ lux = 0
 
 async def read_sensor():
     global lux
-    bh1750.measure()
-    asyncio.sleep_ms(BH1750.MEASUREMENT_TIME_mS)
-    lux = bh1750.illumination()
+    while True:
+        bh1750.measure()
+        await asyncio.sleep_ms(BH1750.MEASUREMENT_TIME_mS)
+        lux = bh1750.illumination()
 
 
 async def communicate_readings():
-    print("Lux:", lux)
+    while True:
+        await asyncio.sleep(1)
+        print("Lux:", lux)
 
 
 async def main():
