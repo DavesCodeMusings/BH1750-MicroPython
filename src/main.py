@@ -22,11 +22,12 @@ async def read_sensor():
         bh1750.measure()
         await asyncio.sleep_ms(BH1750.MEASUREMENT_TIME_mS)
         lux = bh1750.illumination()
+        await asyncio.sleep(5)  # Helps mitigate sensor self-heating
 
 
 async def communicate_readings():
     while True:
-        await asyncio.sleep(1)
+        await asyncio.sleep(10)
         print("Lux:", lux)
 
 
