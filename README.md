@@ -1,4 +1,4 @@
-# I2C Development with MicroPython
+# I2C Development with MicroPython and the BH1750
 This project is both a device driver and an I2C tutorial -- a destination and a journey. The destination is a MicroPython module for reading the BH1750 ambient light sensor. The journey is showing step by step how to create your own driver for an Inter-Integrated Circuit (I2C) communication enabled device.
 
 ## Why the BH1750?
