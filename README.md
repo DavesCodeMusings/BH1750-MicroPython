@@ -389,7 +389,7 @@ What's been done above is to take the original program and rearrange the constan
 
 The names of the methods were insprired by the naming of [MicroPython DHT22](https://docs.micropython.org/en/latest/esp32/quickref.html#dht-driver) methods. But rather than temperature and humidity, we have only illumination.
 
-But what's missing inside the class is any reference to the `sleep_ms(180)`. We know it'ss required from reading the BH1750 datasheet. So why is it missing?
+But what's missing inside the class is any reference to the `sleep_ms(180)`. We know it's required from reading the BH1750 datasheet. So why is it missing?
 
 The answer to that is for flexibility. Calling `sleep_ms(180)` will cause the program to do nothing for 180 mS. Okay, so what?
 
