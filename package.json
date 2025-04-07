@@ -1,0 +1,6 @@
+{
+  "urls": [
+    ["bh1750-one-shot.mpy", "github:DavesCodeMusings/BH1750-MicroPython/bh1750-one-shot.mpy"]
+  ],
+  "version": "0.1"
+}
