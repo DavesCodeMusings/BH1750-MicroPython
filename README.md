@@ -279,7 +279,7 @@ It turns out [someone else on the internet](https://thecavepearlproject.org/2024
 
 To make a long blog post short, 110 Lux reported by a sensor with no dome was reported as 40 Lux with the dome. That's a reduction factor of 2.75x because of the dome.
 
-I also used [Lux meter app](https://play.google.com/store/apps/details?id=com.doggoapps.luxlight) on my phone to do a quick and dirty comparison. My phone varied wildly with even a slight change of angle. I got readings from the Lux Meter app of 90 to 150 vs 76 from the domed sensor. So with my crude methods, it was a factor of about 2x.
+I also used a [Lux meter app](https://play.google.com/store/apps/details?id=com.doggoapps.luxlight) on my phone to do a quick and dirty comparison. My phone varied wildly with even a slight change of angle. I got readings from the Lux Meter app of 90 to 150 vs 76 from the domed sensor. So with my crude methods, it was a factor of about 2x.
 
 Because I have no idea what the quality of the light sensor is for my phone, I'm more inclined to go with the 2.75x factor found by the author comparing the same sensor both with and without a dome.
 
