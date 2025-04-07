@@ -1,3 +1,5 @@
+# Read ambient light level from BH1750 sensor in Hi-Res One-Time mode
+
 from machine import Pin, SoftI2C
 from micropython import const
 from time import sleep_ms
