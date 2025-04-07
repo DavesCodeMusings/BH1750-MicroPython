@@ -17,7 +17,7 @@ class BH1750:
         self._i2c.writeto(self._i2c_addr, BH1750.POWER_ON.to_bytes())
         self._i2c.writeto(self._i2c_addr, BH1750.ONE_TIME_HRES.to_bytes())
 
-    def illumination(self):
+    def illuminance(self):
         result = self._i2c.readfrom(self._i2c_addr, 2)
         lux = round(int.from_bytes(result) / 1.2)
         if self._diffusion_dome:
@@ -41,7 +41,7 @@ def demo():
     bh1750 = BH1750(i2c, dome=DIFFUSION_DOME)
     bh1750.measure()
     sleep_ms(BH1750.MEASUREMENT_TIME_mS)
-    lux = bh1750.illumination()
+    lux = bh1750.illuminance()
     print("Lux:", lux)
 
 

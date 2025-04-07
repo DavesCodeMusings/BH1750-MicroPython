@@ -4,7 +4,7 @@ This project is both a device driver and an I2C tutorial -- a destination and a 
 > If all you want is the device driver, see [QUICKSTART.md](QUICKSTART.md)
 
 ## Why the BH1750?
-I wanted a device to communicate light readings to my home automation system. It's easy enough to find a tutorial on wiring a photoresistor to a microcontroller's analog to digital converter and then calibrate what reading constitutes dark and what indicates light. But the inexpensive BH1750 can read illumination and provide a result in Lux, a standard SI unit, via the I2C bus.
+I wanted a device to communicate light readings to my home automation system. It's easy enough to find a tutorial on wiring a photoresistor to a microcontroller's analog to digital converter and then calibrate what reading constitutes dark and what indicates light. But the inexpensive BH1750 can read illuminance and provide a result in Lux, a standard SI unit, via the I2C bus.
 
 I also knew there were [other MicroPython libraries for the BH1750](https://github.com/flrrth/pico-bh1750) and even an [ESPHome option](https://esphome.io/components/sensor/bh1750.html). In case I got stuck along my journey of creating my own, I'd have something to fall back on.
 
@@ -353,7 +353,7 @@ class BH1750:
         self._i2c.writeto(self._i2c_addr, BH1750.POWER_ON.to_bytes())
         self._i2c.writeto(self._i2c_addr, BH1750.ONE_TIME_HRES.to_bytes())
 
-    def illumination(self):
+    def illuminance(self):
         result = self._i2c.readfrom(self._i2c_addr, 2)
         lux = round(int.from_bytes(result) / 1.2)
         if self._diffusion_dome:
@@ -377,7 +377,7 @@ def demo():
     bh1750 = BH1750(i2c, dome=DIFFUSION_DOME)
     bh1750.measure()
     sleep_ms(BH1750.MEASUREMENT_TIME_mS)
-    lux = bh1750.illumination()
+    lux = bh1750.illuminance()
     print("Lux:", lux)
 
 
@@ -385,9 +385,9 @@ if __name__ == "__main__":
     demo()
 ```
 
-What's been done above is to take the original program and rearrange the constants and program logic into class variables and methods. Most notably, the sending of Power On and Measurement commands has been placed inside a method called `measure()`, while the reading of the resulting Lux measurement is in the method called `illumination()`
+What's been done above is to take the original program and rearrange the constants and program logic into class variables and methods. Most notably, the sending of Power On and Measurement commands has been placed inside a method called `measure()`, while the reading of the resulting Lux measurement is in the method called `illuminance()`
 
-> The names of the methods were insprired by the naming of [MicroPython DHT22](https://docs.micropython.org/en/latest/esp32/quickref.html#dht-driver) methods. But rather than temperature and humidity, we have only illumination.
+> The names of the methods were insprired by the naming of [MicroPython DHT22](https://docs.micropython.org/en/latest/esp32/quickref.html#dht-driver) methods. But rather than temperature and humidity, we have only illuminance.
 
 But what's missing inside the class shown above is any reference to the `sleep_ms(180)`. We know it's required from reading the BH1750 datasheet. So why is it missing?
 
