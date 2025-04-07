@@ -275,7 +275,7 @@ With the sensor toward the center of the room, pointed upward, I got a 70 Lux re
 ## Accounting for the Dome
 The BH1750 I purchased is encased in a white hemispherical dome. This is supposed to help diffuse the incoming light and make the angle of incidence less of a factor in the reading. But, it also reduces the ammount of light coming in. While not critical for my application, I was curious about how much of an effect the dome has.
 
-It turns out [someone else on the internet](https://thecavepearlproject.org/2024/08/10/using-a-bh1750-lux-sensor-to-measure-par/) was curious about this too, and geek out way harder on it than I did.
+It turns out [someone else on the internet](https://thecavepearlproject.org/2024/08/10/using-a-bh1750-lux-sensor-to-measure-par/) was curious about this too, and geeked out way harder on it than I did.
 
 To make a long blog post short, 110 Lux reported by a sensor with no dome was reported as 40 Lux with the dome. That's a reduction factor of 2.75x because of the dome.
 
