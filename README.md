@@ -1,5 +1,5 @@
 # I2C Development with MicroPython and the BH1750
-This project is both a device driver and an I2C tutorial -- a destination and a journey. The destination is a MicroPython module for reading the BH1750 ambient light sensor. The journey is showing step by step how to create your own driver for an Inter-Integrated Circuit (I2C) communication enabled device.
+This project is both a device driver and an I2C tutorial -- a destination and a journey. The destination is a MicroPython module for reading the BH1750 ambient light sensor. The journey is showing step by step how to create your own driver for an Inter-Integrated Circuit (I2C) device.
 
 > If all you want is the device driver, see [QUICKSTART.md](QUICKSTART.md)
 
@@ -48,7 +48,7 @@ else:
         print("Address:", hex(address))
 ```
 
-> The entire program is available as [scan.py](src/scan.py) in the /src directory of this repository.
+> The entire program is available as [scan.py](src/scan.py) in the src directory of this repository.
 
 If everything is wired up correctly, you should see output like what's shown below.
 
@@ -72,16 +72,16 @@ Here are the steps:
 3. Wait for the measurement
 4. Read the result
 
-> The device returns to a Power Off state automatically after taking a measurement, so there's no need for a step 5.
+> The device returns to a Power Off state automatically after taking a measurement, so we don't need a step 5.
 
 Let's take a look at each of the steps in detail.
 
 ### Sending a Power On command
-This seems a little silly sending a Power On command as the first step after supplying Vcc and GND to the device. But, reading the datasheet shows the device will start up in Power Down mode when Vcc is first applied. So we need to turn it on first.
+It seems a little silly sending a Power On command as the first step after supplying Vcc and GND to the device. But, reading the datasheet shows the device will start up in Power Down mode when Vcc is first applied. So we need to turn it on first.
 
 Under the Instruction Set heading in the datasheet, we see a opcodes (labled as opecodes in a typographical error.) These will tell us what needs to be sent to instruct the device to do certain tasks.
 
-The first opcode (0000_0000) is the Power Down instruction. We can skip that, because we already know the device starts in Power Down mode.
+The first opcode (0000_0000) is the Power Down instruction. We can skip that, because we already know the device starts in Power Down mode when supply voltage is applied.
 
 The second opcode (0000_0001) is Power On. Bingo! That's the one we want for this first step.
 
@@ -108,7 +108,7 @@ I2C_DATA = 21
 i2c = SoftI2C(scl=Pin(I2C_CLOCK), sda=Pin(I2C_DATA))
 ```
 
-Now let's add in the device address as a constant, a constant to represent the Power On opcode, and the`write_to()` method that brings it all together.
+Now let's add in the device address as a constant, another constant to represent the Power On opcode, and the`write_to()` method that brings it all together.
 
 ```py
 from machine import Pin, SoftI2C
@@ -168,7 +168,7 @@ After sending the command, all we have to do is wait for the device to take a me
 This step should not be surprising. If you've ever used a sensor device, they almost always need some time to do their job. The venerable DHT22 takes about two seconds. The BH1750 datasheet says it can take a One-Time H-Resolution Mode measurement in 120 mS. Pretty fast.
 
 120mS is also a _typical_ wait time. A closer look at the datasheet's Electrical Characteristics table shows the H-Resolution Mode
-Measurement Time can be up to 180mS. So we need to wait 180mS. Pretty easy with the addition of a call to `sleep_ms()`.
+Measurement Time can be up to 180mS. So we need to wait 180mS to be safe. Pretty easy with the addition of a call to `sleep_ms()`.
 
 Here's the code with the addition of the wait time.
 
@@ -229,7 +229,7 @@ Turning again to the Electrical Characteristics table of the datasheet, we see a
 
 Farther down in the Measurement Sequence Examples, we see 1.2 mentioned again. This time it's in a note saying to divide the returned result by 1.2 to get units of Lux. So we need to do that.
 
-But we can just go dividing a buffer by a floating-point number. Trying that will give an error. First we need to convert the bytes buffer to a number, specifically an integer, because that's what is returned. We can do this using `int.from_bytes(result)`. Then we can divide by 1.2 and do any other math operations we want.
+But we can just go dividing a buffer by a floating-point number. Trying that will give an error. First we need to convert the bytes buffer to a number, specifically an integer, because that's what is returned. We can do this using `int.from_bytes(result)`. Once the result is an integer, we can divide by 1.2 and do any other math operations we want.
 
 So in the end, the adjustment looks like this:
 
@@ -264,7 +264,7 @@ lux = round(int.from_bytes(result) / 1.2)
 print("Lux reading:", lux)
 ```
 
-Indoors on a clear day, with the sensor pointed toward a north facing window, I got this:
+Indoors on a clear afternoon, with the sensor pointed toward a north facing window, I got this:
 
 ```
 Lux reading: 165
@@ -279,11 +279,11 @@ It turns out [someone else on the internet](https://thecavepearlproject.org/2024
 
 To make a long blog post short, 110 Lux reported by a sensor with no dome was reported as 40 Lux with the dome. That's a reduction factor of 2.75x because of the dome.
 
-I also used a [Lux meter app](https://play.google.com/store/apps/details?id=com.doggoapps.luxlight) on my phone to do a quick and dirty comparison. My phone varied wildly with even a slight change of angle. I got readings from the Lux Meter app of 90 to 150 vs 76 from the domed sensor. So with my crude methods, it was a factor of about 2x.
+I also used a [Lux meter app](https://play.google.com/store/apps/details?id=com.doggoapps.luxlight) on my phone to do a quick and dirty comparison. The readings varied wildly with even a slight change of angle. I got readings from the Lux Meter app of 90 to 150 vs 76 from the domed sensor. So with my crude methods, it was a factor of about 2x or less.
 
 Because I have no idea what the quality of the light sensor is for my phone, I'm more inclined to go with the 2.75x factor found by the author comparing the same sensor both with and without a dome.
 
-For the code, I could have a boolean variable `DIFFUSION_DOME` to determine if the correction should be made or not.
+For flexibility, I could have a boolean variable `DIFFUSION_DOME` to determine if the correction should be made or not.
 
 Adding that to the code so far would give what's shown below.
 
@@ -328,12 +328,12 @@ So now I know the indoor light level at sunset, the time at which I've decided I
 
 My goal for havng an ambient light sensor is to integrate with home automation to turn on lights when it's dark, but not necessarily sunset. Think overcast rainy days. And as the MycroPython program stands now, all that's left is sending the data to the home automation system.
 
-That's something I've worked out with my [BTHome-MicroPython](https://github.com/DavesCodeMusings/BTHome-MicroPython), so I won't rehash it here. But at the beginning of this journey, I promised you a MicroPython module. 
+Sending readings from MicroPython to Home Assistant is something I've worked out with my [BTHome-MicroPython](https://github.com/DavesCodeMusings/BTHome-MicroPython), so I won't rehash it here. But at the beginning of this journey, I promised you a MicroPython module. 
 
 ## Writing a MicroPython Module for the BH1750
-Creating a driver module for the device consists of taking the existing code and chopping it up into methods that are part of a class representing the BH1750 sensor. Why go to the trouble of creating a class? Theoretically, there could be multiple BH1750 sensors attached to a single microcontroller. The BH1750 can use one of two available addresses and the ESP32 can handle more than one I2C bus. So it makes sense to track the I2C bus and address, as well as diffusion dome or not, in a class instance's properties.
+Creating a driver module for the device consists of taking the existing code and chopping it up into methods that are part of a class representing a BH1750 sensor. Why go to the trouble of creating a class? Theoretically, there could be multiple BH1750 sensors attached to a single microcontroller. The BH1750 can use one of two available addresses and the ESP32 can handle more than one I2C bus. So it makes sense to track the I2C bus and address, as well as diffusion dome or not, in a class instance's properties.
 
-Let's start by looking at the finished product and then point out the differences to the original program.
+Let's start by looking at the finished product and then point out the differences from the original program.
 
 ```py
 from micropython import const
@@ -387,21 +387,21 @@ if __name__ == "__main__":
 
 What's been done above is to take the original program and rearrange the constants and program logic into class variables and methods. Most notably, the sending of Power On and Measurement commands has been placed inside a method called `measure()`, while the reading of the resulting Lux measurement is in the method called `illumination()`
 
-The names of the methods were insprired by the naming of [MicroPython DHT22](https://docs.micropython.org/en/latest/esp32/quickref.html#dht-driver) methods. But rather than temperature and humidity, we have only illumination.
+> The names of the methods were insprired by the naming of [MicroPython DHT22](https://docs.micropython.org/en/latest/esp32/quickref.html#dht-driver) methods. But rather than temperature and humidity, we have only illumination.
 
-But what's missing inside the class is any reference to the `sleep_ms(180)`. We know it's required from reading the BH1750 datasheet. So why is it missing?
+But what's missing inside the class shown above is any reference to the `sleep_ms(180)`. We know it's required from reading the BH1750 datasheet. So why is it missing?
 
 The answer to that is for flexibility. Calling `sleep_ms(180)` will cause the program to do nothing for 180 mS. Okay, so what?
 
-Imagine the BH1750 is attached to a microcontroller that uses Bluetooth Low Energy (BLE) to communicate its Lux readings. MicroPython Bluetooth is asynchronous. Doing nothing for 180 mS isn't really compatible with asynchronous program execution.
+Imagine the BH1750 is attached to a microcontroller that uses Bluetooth Low Energy (BLE) to communicate its Lux readings. MicroPython's Bluetooth (aioble) module is asynchronous. Doing nothing for 180 mS isn't really compatible with asynchronous program execution.
 
-By splitting the sending of commands from the reading of results, and pulling the sleep_ms function out from the middle of it, we're giving the user a choice. You can call `time.sleep_ms()` and do nothing for 180 mS, or you can `await asyncio.sleep_ms()` and let another async task execute while you wait. And just to make things easier, there's a class variable MEASUREMENT_TIME_mS that removes the burden of remembering just how many milliseconds to wait.
+By splitting the sending of commands from the reading of results, and pulling the sleep_ms function out from the middle of it, we're giving the user a choice. You can call `time.sleep_ms()` and do nothing for 180 mS, or you can `await asyncio.sleep_ms()` and let another async task execute while you wait. And just to make things easier, there's a class variable called MEASUREMENT_TIME_mS that removes the burden of remembering just how many milliseconds to wait.
 
-In other changes, we've also moved the setup of the I2C bus outside of the class and into the `demo()` subroutine. This facilitates the idea of possibley having multiple BH1750 sensors attached to a single microcontroller.
+In other changes, we've also moved the setup of the I2C bus outside of the class and into a `demo()` subroutine. This facilitates the idea of possibly having multiple BH1750 sensors attached to a single microcontroller.
 
 Finally, we make the `demo()` subroutine's execution conditional upon whether the file is executed outright or imported as a module. If it's imported, the demo is skipped. So we get the flexibility of running it standalone, without having to code up a `main.py` or similar, but we can also use it as a module without any changes to the code.
 
 ## Next Steps
-The goal of creating my own I2C device driver has been realized. Now, my plan is to combine this with my [BTHome-MicroPython](https://github.com/DavesCodeMusings/BTHome-MicroPython) project and construct a Bluetooth Low Energy (BLE) beacon that sends ambient light levels to my Home Assistant automation system.
+The goal of creating my own I2C device driver has been realized. Now, my plan is to combine this with my [BTHome-MicroPython](https://github.com/DavesCodeMusings/BTHome-MicroPython) project and construct a Bluetooth Low Energy (BLE) beacon that sends ambient light levels to my Home Assistant automation home system.
 
 If you made it this far, I hope you got some useful information out of it.
