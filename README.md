@@ -121,7 +121,7 @@ I2C_DATA = const(21)
 I2C_ADDR = cont(0x23)
 
 # BH1750 opcodes
-POWER_ON = const(0b0000_0001)
+POWER_ON = const(0b_0000_0001)
 
 i2c = SoftI2C(scl=Pin(I2C_CLOCK), sda=Pin(I2C_DATA))
 i2c.writeto(I2C_ADDR, POWER_ON.to_bytes())
@@ -135,7 +135,7 @@ Going back to the BH1750 datasheet's flow chart for a moment, we'll see a decisi
 To take a One Time H-Resolution reading, we simply send the opcode using the same `writeto()` method we used to send the Power On command.
 
 ```
-ONE_TIME_HRES = const(0b0010_0000)
+ONE_TIME_HRES = const(0b_0010_0000)
 i2c.writeto(I2C_ADDR, ONE_TIME_HRES.to_bytes())
 ```
 
@@ -154,8 +154,8 @@ I2C_DATA = const(21)
 I2C_ADDR = cont(0x23)
 
 # BH1750 opcodes
-POWER_ON = const(0b0000_0001)
-ONE_TIME_HRES = const(0b0010_0000)
+POWER_ON = const(0b_0000_0001)
+ONE_TIME_HRES = const(0b_0010_0000)
 
 i2c = SoftI2C(scl=Pin(I2C_CLOCK), sda=Pin(I2C_DATA))
 i2c.writeto(I2C_ADDR, POWER_ON.to_bytes())
@@ -184,8 +184,8 @@ I2C_DATA = const(21)
 I2C_ADDR = cont(0x23)
 
 # BH1750 opcodes
-POWER_ON = const(0b0000_0001)
-ONE_TIME_HRES = const(0b0010_0000)
+POWER_ON = const(0b_0000_0001)
+ONE_TIME_HRES = const(0b_0010_0000)
 
 i2c = SoftI2C(scl=Pin(I2C_CLOCK), sda=Pin(I2C_DATA))
 i2c.writeto(I2C_ADDR, POWER_ON.to_bytes())
@@ -212,8 +212,8 @@ I2C_DATA = const(21)
 I2C_ADDR = cont(0x23)
 
 # BH1750 opcodes
-POWER_ON = const(0b0000_0001)
-ONE_TIME_HRES = const(0b0010_0000)
+POWER_ON = const(0b_0000_0001)
+ONE_TIME_HRES = const(0b_0010_0000)
 
 i2c = SoftI2C(scl=Pin(I2C_CLOCK), sda=Pin(I2C_DATA))
 i2c.writeto(I2C_ADDR, POWER_ON.to_bytes())
@@ -251,8 +251,8 @@ I2C_DATA = const(21)
 I2C_ADDR = cont(0x23)
 
 # BH1750 opcodes
-POWER_ON = const(0b0000_0001)
-ONE_TIME_HRES = const(0b0010_0000)
+POWER_ON = const(0b_0000_0001)
+ONE_TIME_HRES = const(0b_0010_0000)
 
 i2c = SoftI2C(scl=Pin(I2C_CLOCK), sda=Pin(I2C_DATA))
 i2c.writeto(I2C_ADDR, POWER_ON.to_bytes())
@@ -302,8 +302,8 @@ I2C_ADDR = cont(0x23)
 DIFFUSION_DOME = const(True)
 
 # BH1750 opcodes
-POWER_ON = const(0b0000_0001)
-ONE_TIME_HRES = const(0b0010_0000)
+POWER_ON = const(0b_0000_0001)
+ONE_TIME_HRES = const(0b_0010_0000)
 
 i2c = SoftI2C(scl=Pin(I2C_CLOCK), sda=Pin(I2C_DATA))
 i2c.writeto(I2C_ADDR, POWER_ON.to_bytes())
@@ -340,8 +340,8 @@ from micropython import const
 
 
 class BH1750:
-    POWER_ON = const(0b0000_0001)
-    ONE_TIME_HRES = const(0b0010_0000)
+    POWER_ON = const(0b_0000_0001)
+    ONE_TIME_HRES = const(0b_0010_0000)
     MEASUREMENT_TIME_mS = const(180)
 
     def __init__(self, i2c, addr=0x23, dome=True):

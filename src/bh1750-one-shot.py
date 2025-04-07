@@ -4,8 +4,8 @@ from micropython import const
 
 
 class BH1750:
-    POWER_ON = const(0b0000_0001)
-    ONE_TIME_HRES = const(0b0010_0000)
+    POWER_ON = const(0b_0000_0001)
+    ONE_TIME_HRES = const(0b_0010_0000)
     MEASUREMENT_TIME_mS = const(180)
 
     def __init__(self, i2c, addr=0x23, dome=True):

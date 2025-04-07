@@ -14,8 +14,8 @@ I2C_ADDR = const(0x23)
 DIFFUSION_DOME = const(True)
 
 # BH1750 opcodes
-POWER_ON = const(0b0000_0001)
-ONE_TIME_HRES = const(0b0010_0000)
+POWER_ON = const(0b_0000_0001)
+ONE_TIME_HRES = const(0b_0010_0000)
 
 i2c = SoftI2C(scl=Pin(I2C_CLOCK), sda=Pin(I2C_DATA))
 i2c.writeto(I2C_ADDR, POWER_ON.to_bytes())
