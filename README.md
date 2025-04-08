@@ -22,7 +22,7 @@ If you've ever used an I2C device in MicroPython, you're probably familar with t
 
 ```py
 from machine import Pin, SoftI2C
-from mycropython import const
+from micropython import const
 
 # Values for ESP32 Devkit V1 (30-pin board with four corner mounting holes)
 # Adjust as needed for other boards.
@@ -104,7 +104,7 @@ We're back to this:
 
 ```py
 from machine import Pin, SoftI2C
-from mycropython import const
+from micropython import const
 
 # Values for ESP32 Devkit V1 (30-pin board with four corner mounting holes)
 # Adjust as needed for other boards.
@@ -118,7 +118,7 @@ Now let's add in the device address as a constant, another constant to represent
 
 ```py
 from machine import Pin, SoftI2C
-from mycropython import const
+from micropython import const
 
 # Values for ESP32 Devkit V1 (30-pin board with four corner mounting holes)
 # Adjust as needed for other boards.
@@ -151,7 +151,7 @@ Here's the code so far.
 
 ```py
 from machine import Pin, SoftI2C
-from mycropython import const
+from micropython import const
 
 # Values for ESP32 Devkit V1 (30-pin board with four corner mounting holes)
 # Adjust as needed for other boards.
@@ -180,7 +180,7 @@ Here's the code with the addition of the wait time.
 
 ```py
 from machine import Pin, SoftI2C
-from mycropython import const
+from micropython import const
 from time import sleep_ms
 
 # Values for ESP32 Devkit V1 (30-pin board with four corner mounting holes)
@@ -208,7 +208,7 @@ With that line added, the code now looks like this:
 
 ```py
 from machine import Pin, SoftI2C
-from mycropython import const
+from micropython import const
 from time import sleep_ms
 
 # Values for ESP32 Devkit V1 (30-pin board with four corner mounting holes)
@@ -247,7 +247,7 @@ Taking all the code into account, we now have what's shown below.
 
 ```py
 from machine import Pin, SoftI2C
-from mycropython import const
+from micropython import const
 from time import sleep_ms
 
 # Values for ESP32 Devkit V1 (30-pin board with four corner mounting holes)
@@ -295,7 +295,7 @@ Adding that to the code so far would give what's shown below.
 
 ```py
 from machine import Pin, SoftI2C
-from mycropython import const
+from micropython import const
 from time import sleep_ms
 
 # Values for ESP32 Devkit V1 (30-pin board with four corner mounting holes)
@@ -332,7 +332,7 @@ Currently, I have some smart plug attached lamps that are scheduled to come on a
 
 So now I know the indoor light level at sunset, the time at which I've decided I should have the lights come on, is 14 Lux. So what?
 
-My goal for havng an ambient light sensor is to integrate with home automation to turn on lights when it's dark, but not necessarily sunset. Think overcast rainy days. And as the MycroPython program stands now, all that's left is sending the data to the home automation system.
+My goal for havng an ambient light sensor is to integrate with home automation to turn on lights when it's dark, but not necessarily sunset. Think overcast rainy days. And as the micropython program stands now, all that's left is sending the data to the home automation system.
 
 Sending readings from MicroPython to Home Assistant is something I've worked out with my [BTHome-MicroPython](https://github.com/DavesCodeMusings/BTHome-MicroPython), so I won't rehash it here. But at the beginning of this journey, I promised you a MicroPython module. 
 
