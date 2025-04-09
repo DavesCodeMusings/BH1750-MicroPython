@@ -289,7 +289,7 @@ I also used a [Lux meter app](https://play.google.com/store/apps/details?id=com.
 
 Because I have no idea what the quality of the light sensor is for my phone, I'm more inclined to go with the 2.75x factor found by the author comparing the same sensor both with and without a dome.
 
-For flexibility, I could have a boolean variable `DOME_CORRECTION` to determine if the correction should be made or not and if so, by what multiplier.
+For flexibility, I could have a variable `DOME_CORRECTION` to determine if the correction should be made or not and if so, by what multiplier.
 
 Adding that to the code so far would give what's shown below.
 
@@ -359,6 +359,7 @@ class BH1750:
         self._i2c.writeto(self._i2c_addr, BH1750.POWER_ON.to_bytes())
         self._i2c.writeto(self._i2c_addr, BH1750.ONE_TIME_HRES.to_bytes())
 
+    @property
     def illuminance(self):
         result = self._i2c.readfrom(self._i2c_addr, 2)
         lux = int.from_bytes(result) / 1.2
@@ -383,7 +384,7 @@ def demo():
     bh1750 = BH1750(i2c, dome_correction=DOME_CORRECTION)
     bh1750.measure()
     sleep_ms(BH1750.MEASUREMENT_TIME_mS)
-    lux = bh1750.illuminance()
+    lux = bh1750.illuminance
     print("Lux:", lux)
 
 
@@ -404,6 +405,8 @@ Imagine the BH1750 is attached to a microcontroller that uses Bluetooth Low Ener
 By splitting the sending of commands from the reading of results, and pulling the sleep_ms function out from the middle of it, we're giving the user a choice. You can call `time.sleep_ms()` and do nothing for 180 mS, or you can `await asyncio.sleep_ms()` and let another async task execute while you wait. And just to make things easier, there's a class variable called MEASUREMENT_TIME_mS that removes the burden of remembering just how many milliseconds to wait.
 
 In other changes, we've also moved the setup of the I2C bus outside of the class and into a `demo()` subroutine. This facilitates the idea of possibly having multiple BH1750 sensors attached to a single microcontroller.
+
+Also, the `illuminance()` method is given a `@property` decorator so illuminance values can be read like any other variable.
 
 Finally, we make the `demo()` subroutine's execution conditional upon whether the file is executed outright or imported as a module. If it's imported, the demo is skipped. So we get the flexibility of running it standalone, without having to code up a `main.py` or similar, but we can also use it as a module without any changes to the code.
 
