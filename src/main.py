@@ -1,7 +1,7 @@
 from machine import Pin, SoftI2C
 from micropython import const
 import asyncio
-from bh1750_one_shot import BH1750
+from bh1750 import BH1750
 
 # Values for ESP32 Devkit V1 (30-pin board with four corner mounting holes)
 # Adjust as needed for other boards.

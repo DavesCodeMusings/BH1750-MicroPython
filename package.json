@@ -1,6 +1,6 @@
 {
   "urls": [
-    ["bh1750_one_shot.mpy", "github:DavesCodeMusings/BH1750-MicroPython/bh1750_one_shot.mpy"]
+    ["bh1750.mpy", "github:DavesCodeMusings/BH1750-MicroPython/bh1750.mpy"]
   ],
-  "version": "0.4"
+  "version": "0.5"
 }
