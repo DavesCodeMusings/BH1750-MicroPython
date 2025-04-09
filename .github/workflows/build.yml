@@ -1,7 +1,7 @@
 name: mpy build
 on: push
 env:
-  SRC_FILE: src/bh1750_one_shot.py
+  SRC_FILE: src/bh1750.py
 permissions:
   contents: write
 jobs:
