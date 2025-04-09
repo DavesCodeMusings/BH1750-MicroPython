@@ -240,7 +240,7 @@ But we can just go dividing a buffer by a floating-point number. Trying that wil
 So in the end, the adjustment looks like this:
 
 ```py
-lux = round(int.from_bytes(result) / 1.2)
+lux = int.from_bytes(result) / 1.2
 ```
 
 Taking all the code into account, we now have what's shown below.
@@ -265,9 +265,9 @@ i2c.writeto(I2C_ADDR, POWER_ON.to_bytes())
 i2c.writeto(I2C_ADDR, ONE_TIME_HRES.to_bytes())
 sleep_ms(180)
 result = i2c.readfrom(I2C_ADDR, 2)
-lux = round(int.from_bytes(result) / 1.2)
+lux = int.from_bytes(result) / 1.2
 
-print("Lux reading:", lux)
+print("Lux reading:", round(lux))
 ```
 
 Indoors on a clear afternoon, with the sensor pointed toward a north facing window, I got this:
@@ -289,7 +289,7 @@ I also used a [Lux meter app](https://play.google.com/store/apps/details?id=com.
 
 Because I have no idea what the quality of the light sensor is for my phone, I'm more inclined to go with the 2.75x factor found by the author comparing the same sensor both with and without a dome.
 
-For flexibility, I could have a boolean variable `DIFFUSION_DOME` to determine if the correction should be made or not.
+For flexibility, I could have a boolean variable `DOME_CORRECTION` to determine if the correction should be made or not and if so, by what multiplier.
 
 Adding that to the code so far would give what's shown below.
 
@@ -304,8 +304,8 @@ I2C_CLOCK = const(22)
 I2C_DATA = const(21)
 I2C_ADDR = cont(0x23)
 
-# Does the sensor have a dome?
-DIFFUSION_DOME = const(True)
+# How much compensation for the sensor's dome?
+DOME_CORRECTION = const(2.75)
 
 # BH1750 opcodes
 POWER_ON = const(0b_0000_0001)
@@ -316,11 +316,11 @@ i2c.writeto(I2C_ADDR, POWER_ON.to_bytes())
 i2c.writeto(I2C_ADDR, ONE_TIME_HRES.to_bytes())
 sleep_ms(180)
 result = i2c.readfrom(I2C_ADDR, 2)
-lux = round(int.from_bytes(result) / 1.2)
-if DIFFUSION_DOME:
-    lux = round(lux * 2.75)
+lux = int.from_bytes(result) / 1.2
+if DOME_CORRECTION:
+    lux *= DOME_CORRECTION
 
-print("Lux reading:", lux)
+print("Lux reading:", round(lux))
 ```
 
 > Also available in the repository as [read_lux.py](src/read_lux.py)
@@ -350,10 +350,10 @@ class BH1750:
     ONE_TIME_HRES = const(0b_0010_0000)
     MEASUREMENT_TIME_mS = const(180)
 
-    def __init__(self, i2c, addr=0x23, dome=True):
+    def __init__(self, i2c, addr=0x23, dome_correction=0):
         self._i2c = i2c
         self._i2c_addr = addr
-        self._diffusion_dome = dome
+        self._dome_correction = dome_correction
 
     def measure(self):
         self._i2c.writeto(self._i2c_addr, BH1750.POWER_ON.to_bytes())
@@ -361,10 +361,10 @@ class BH1750:
 
     def illuminance(self):
         result = self._i2c.readfrom(self._i2c_addr, 2)
-        lux = round(int.from_bytes(result) / 1.2)
-        if self._diffusion_dome:
-            lux = round(lux * 2.75)
-        return lux
+        lux = int.from_bytes(result) / 1.2
+        if self._dome_correction:
+            lux *= self._dome_correction
+        return round(lux)
 
 
 def demo():
@@ -376,11 +376,11 @@ def demo():
     I2C_CLOCK = const(22)
     I2C_DATA = const(21)
 
-    # Does the sensor have a dome?
-    DIFFUSION_DOME = const(True)
+    # How much compensation for the sensor's dome?
+    DOME_CORRECTION = const(True)
 
     i2c = SoftI2C(scl=Pin(I2C_CLOCK), sda=Pin(I2C_DATA))
-    bh1750 = BH1750(i2c, dome=DIFFUSION_DOME)
+    bh1750 = BH1750(i2c, dome_correction=DOME_CORRECTION)
     bh1750.measure()
     sleep_ms(BH1750.MEASUREMENT_TIME_mS)
     lux = bh1750.illuminance()

@@ -17,11 +17,11 @@ from bh1750_one_shot import BH1750
 I2C_CLOCK = const(22)
 I2C_DATA = const(21)
 
-# Does the sensor have a dome?
-DIFFUSION_DOME = const(True)
+# How much compensation for the sensor's dome?
+DOME_CORRECTION = const(2.75)
 
 i2c = SoftI2C(scl=Pin(I2C_CLOCK), sda=Pin(I2C_DATA))
-bh1750 = BH1750(i2c, dome=DIFFUSION_DOME)
+bh1750 = BH1750(i2c, dome_correction=DOME_CORRECTION)
 lux = 0
 
 
@@ -62,11 +62,11 @@ from bh1750_one_shot import BH1750
 I2C_CLOCK = const(22)
 I2C_DATA = const(21)
 
-# Does the sensor have a dome?
-DIFFUSION_DOME = const(True)
+# How much compensation for the sensor's dome?
+DOME_CORRECTION = const(2.75)
 
 i2c = SoftI2C(scl=Pin(I2C_CLOCK), sda=Pin(I2C_DATA))
-bh1750 = BH1750(i2c, dome=DIFFUSION_DOME)
+bh1750 = BH1750(i2c, dome_correction=DOME_CORRECTION)
 bh1750.measure()
 sleep_ms(BH1750.MEASUREMENT_TIME_mS)
 lux = bh1750.illuminance()

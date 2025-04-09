@@ -8,10 +8,10 @@ class BH1750:
     ONE_TIME_HRES = const(0b_0010_0000)
     MEASUREMENT_TIME_mS = const(180)
 
-    def __init__(self, i2c, addr=0x23, dome=True):
+    def __init__(self, i2c, addr=0x23, dome_correction=0):
         self._i2c = i2c
         self._i2c_addr = addr
-        self._diffusion_dome = dome
+        self._dome_correction = dome_correction
 
     def measure(self):
         self._i2c.writeto(self._i2c_addr, BH1750.POWER_ON.to_bytes())
@@ -19,10 +19,10 @@ class BH1750:
 
     def illuminance(self):
         result = self._i2c.readfrom(self._i2c_addr, 2)
-        lux = round(int.from_bytes(result) / 1.2)
-        if self._diffusion_dome:
-            lux = round(lux * 2.75)
-        return lux
+        lux = int.from_bytes(result) / 1.2
+        if self._dome_correction:
+            lux = lux * self._dome_correction
+        return round(lux)
 
 
 def demo():
@@ -34,11 +34,11 @@ def demo():
     I2C_CLOCK = const(22)
     I2C_DATA = const(21)
 
-    # Does the sensor have a dome?
-    DIFFUSION_DOME = const(True)
+    # How much compensation for the sensor's dome?
+    DOME_CORRECTION = const(2.75)
 
     i2c = SoftI2C(scl=Pin(I2C_CLOCK), sda=Pin(I2C_DATA))
-    bh1750 = BH1750(i2c, dome=DIFFUSION_DOME)
+    bh1750 = BH1750(i2c, dome_correction=DOME_CORRECTION)
     bh1750.measure()
     sleep_ms(BH1750.MEASUREMENT_TIME_mS)
     lux = bh1750.illuminance()
