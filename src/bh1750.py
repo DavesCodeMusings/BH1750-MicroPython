@@ -16,10 +16,10 @@ class BH1750:
     def measure(self):
         acks = self._i2c.writeto(self._i2c_addr, BH1750.POWER_ON.to_bytes())
         if acks != 1:
-            raise IOError("I2C Power On command not acknowledged.")
+            raise OSError("I2C Power On command not acknowledged.")
         acks = self._i2c.writeto(self._i2c_addr, BH1750.ONE_TIME_HRES.to_bytes())
         if acks != 1:
-            raise IOError("I2C Measure command not acknowledged.")
+            raise OSError("I2C Measure command not acknowledged.")
 
     @property
     def illuminance(self):
